@@ -376,6 +376,12 @@ class XMLStream(object):
 	def removeStanzaExtension(self, stanza_class, stanza_extension):
 		stanza_extension[stanza_class].pop(stanza_extension)
 
+	def getStanza(self, stanza_class_name):		
+		for stanza_class in self.__root_stanza:			
+			if stanza_class_name == stanza_class.name:				
+				return stanza_class
+		return None
+
 	def tostring(self, xml, xmlns='', stringbuffer=''):
 		newoutput = [stringbuffer]
 		#TODO respect ET mapped namespaces

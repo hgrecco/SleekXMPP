@@ -73,7 +73,7 @@ class ClientXMPP(basexmpp, XMLStream):
 		self.registerFeature("<mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl' />", self.handler_sasl_auth, True)
 		self.registerFeature("<bind xmlns='urn:ietf:params:xml:ns:xmpp-bind' />", self.handler_bind_resource)
 		self.registerFeature("<session xmlns='urn:ietf:params:xml:ns:xmpp-session' />", self.handler_start_session)
-		
+		self.getStanza("message").reply = client_reply
 		#self.registerStanzaExtension('PresenceStanza', PresenceStanzaType)
 		#self.register_plugins()
 	
@@ -244,3 +244,14 @@ class ClientXMPP(basexmpp, XMLStream):
 			if iq['type'] == 'set':
 				self.send(self.Iq().setValues({'type': 'result', 'id': iq['id']}).enable('roster'))
 		self.event("roster_update", iq)
+
+
+def client_reply(self, body=None):
+	StanzaBase.reply(self)
+	self['from'] = getattr(self.stream, 'fulljid', '')
+	if self['type'] == 'groupchat':
+		self['to'] = self['to'].bare
+	del self['id']
+	if body is not None:
+		self['body'] = body
+	return self
