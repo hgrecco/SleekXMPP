@@ -351,8 +351,7 @@ class StanzaBase(ElementBase):
 			del self.plugins[plugin]
 	
 	def reply(self):
-		self['to'] = self['from']		
-		self['from'] = getattr(self.stream, 'fulljid', '')
+		self['from'], self['to'] = self['to'], self['from']
 		self.clear()
 		return self
 	
