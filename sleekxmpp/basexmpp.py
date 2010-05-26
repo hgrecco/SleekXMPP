@@ -25,6 +25,8 @@ from . stanza.nick import Nick
 from . stanza.htmlim import HTMLIM
 from . stanza.error import Error
 
+from . plugins.base import PluginDict
+
 import logging
 import threading
 
@@ -50,7 +52,7 @@ class basexmpp(object):
 		self.jid = ''
 		self.username = ''
 		self.server = ''
-		self.plugin = {}
+		self.plugin = PluginDict()
 		self.auto_authorize = True
 		self.auto_subscribe = True
 		self.event_handlers = {}
